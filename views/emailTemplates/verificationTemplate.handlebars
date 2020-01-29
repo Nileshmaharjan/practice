@@ -1,0 +1,71 @@
+{{> header }}
+
+<!-- BODY -->
+<table class="body-wrap">
+	<tr>
+		<td></td>
+		<td class="container" bgcolor="#FFFFFF">
+
+			<div class="content">
+			<table>
+				<tr>
+					<td>
+						<h3>Hi, {{userName}}</h3>
+
+						<p>Thank you for joining.Verify your account by clicking below link:</p>
+						<p><a href="{{emailVerificationLink}}">Verify Account</a></p>
+
+						<p class="callout">
+							If above link does not work, copy this link  and paste it in your browser:<p> {{emailVerificationLink}}</p>
+						</p>
+
+						<!-- social & contact -->
+						<table class="social" width="100%">
+							<tr>
+								<td>
+
+									<!-- column 1 -->
+									<table align="left" class="column">
+										<tr>
+											<td>
+
+												<h5 class="">Connect with Us:</h5>
+												<p class="">
+												{{siteName}}
+												<!-- <a href="[WEB_SITE_URL]" class="soc-btn"><img src="[SITE_LOGO_URL]" alt="LOGO"></a> -->
+												</p>
+
+
+											</td>
+										</tr>
+									</table><!-- /column 1 -->
+
+									<!-- column 2 -->
+									<table align="left" class="column">
+										<tr>
+											<td>
+
+												<h5 class="">Contact Info:</h5>
+												<p>Phone: <strong>{{siteContactNumber}}</strong><br/>
+                Email: <strong><a href="emailto:{{siteEmail}}">{{siteEmail}}</a></strong></p>
+
+											</td>
+										</tr>
+									</table><!-- /column 2 -->
+
+									<span class="clear"></span>
+
+								</td>
+							</tr>
+						</table><!-- /social & contact -->
+
+					</td>
+				</tr>
+			</table>
+			</div><!-- /content -->
+
+		</td>
+		<td></td>
+	</tr>
+</table><!-- /BODY -->
+{{> footer }}

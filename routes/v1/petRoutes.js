@@ -7,4 +7,7 @@ const petController = require('../../controllers/v1/api/petController');
 // router.route('/createProfile').post(passportJWT, requireJsonContent, validationSchemas.createPetProfileSchema, petController.createPetProfile);
 
 router.route('/createProfile').post(passportJWT, requireJsonContent, validateBody(validationSchemas.createPetProfileSchema),petController.createPetProfile);
+router.route('/updatePetPhoto').patch(passportJWT, requireJsonContent, validateBody(validationSchemas.updatePetProfile), petController.updatePetProfilePhoto);
+
+
 module.exports = router;

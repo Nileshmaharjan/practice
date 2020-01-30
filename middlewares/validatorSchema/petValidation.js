@@ -29,6 +29,11 @@ module.exports = {
             isLost:[true,false],
             lostDetail:joi.object().when('isLost',{is:true,then:joi.required()})
 
+        }),
+        updatePetProfile: joi.object().keys({
+            petId: joi.objectId().label('Pet Id'),
+            photoUrl: joi.string().trim().uri().required().label('Photo Url'),
+            isCoverPhoto: joi.boolean().required().label('Is Cover Photo')
         })
 }
 }

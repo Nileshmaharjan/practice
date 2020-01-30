@@ -1,7 +1,10 @@
 let uri = process.env.DB_DRIVER + '://' + process.env.DB_HOST + ':' + process.env.DB_PORT + '/' + process.env.DB_DATABASE;
 
-console.log(process.env.DB_DRIVER)
 module.exports = {
+    JWT_ACCESS_TOKEN_SECRET: process.env.JWT_ACCESS_TOKEN_SECRET || ' secret key for access token ',
+    JWT_REFRESH_TOKEN_SECRET: process.env.JWT_REFRESH_TOKEN_SECRET || ' secret key for refresh token ',
+    JWT_ACCESS_TOKEN_LIFE: process.env.JWT_ACCESS_TOKEN_LIFE || new Date().setDate(new Date().getDate()+1), //current time + 1 dat ahead,
+    JWT_REFRESH_TOKEN_LIFE: process.env.JWT_REFRESH_TOKEN_LIFE || new Date().setDate(new Date().getDate()+3), //current time + 3 day ahead
     dbConfig: {
         uri: uri,
         options: {

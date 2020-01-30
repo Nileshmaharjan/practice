@@ -1,8 +1,11 @@
 const userModel = require('../../../models/users');
+const deviceModel = require('../../../models/devices')
 const uuidv1 = require('uuid/v1');
 const moment = require('moment');
 const apiMessage = require('../../../constants/lang')
-const emailModule = require('../../../modules/mailerModule')
+const emailModule = require('../../../modules/mailerModule');
+const {signAccessToken, signRefreshToken} = require('../../../modules/jwtToken');
+const {JWT_ACCESS_TOKEN_LIFE} = require('../../../config/index')
 
 module.exports = {
     register: async (req, res, next) => {
@@ -41,7 +44,7 @@ module.exports = {
                 }
             
 
-            emailModule.triggerEmail(emailObj)
+            // emailModule.triggerEmail(emailObj)
             signUpSuccessMessage = apiMessage.REGISTER.REGISTER_SUCCESS.message;
             res.status(apiMessage.REGISTER.REGISTER_SUCCESS.httpCode).json({
                 message: signUpSuccessMessage
@@ -51,6 +54,55 @@ module.exports = {
         } 
         catch (e) {
             console.log(e)
+            next(e)
+        }
+    },
+
+    signIn: async(req, res, next) => {
+        const {deviceId, deviceToken} = req.body;
+        const user = req.user;
+        console.log()
+        try {
+            const accessToken = await signAccessToken(user._id);
+            const refreshToken = await signRefreshToken(user._id);
+
+            const oldDevice = await deviceModel.findOne({deviceId});
+            if (oldDevice) {
+                await oldDevice.updateOne({
+                    user: user._id,
+                    accessToken,
+                    refreshToken,
+                    expiredAt: 0
+                }, {new: false}).exec()
+            } else {
+                const newDevice = new deviceModel({
+                    user: user._id,
+                    deviceId,
+                    deviceToken,
+                    accessToken,
+                    refreshToken
+                });
+                await newDevice.save();
+            }
+
+            let profile = await userModel.profileById(user._id);
+            profile = profile.toObject();
+            res.set('accessToken',accessToken);
+            res.set('refreshToken',refreshToken);
+            res.set('expiresIn',JWT_ACCESS_TOKEN_LIFE);
+            res.status(apiMessage.SUCCESS.httpCode).json({
+                message: apiMessage.SUCCESS.message,
+                data: {
+                    ...profile,
+                    tokenData:{
+                        accessToken,
+                        refreshToken,
+                        expiresIn: JWT_ACCESS_TOKEN_LIFE
+                    }
+                }
+            });
+        }
+        catch(e) {
             next(e)
         }
     },

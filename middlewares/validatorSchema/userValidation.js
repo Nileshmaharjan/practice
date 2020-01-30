@@ -22,6 +22,12 @@ module.exports = {
             }),
             userName: joi.string().trim().required().min(6).max(200).label('User Name'),
 
-        })
+        }),
+        loginSchema: joi.object().keys({
+            userName: joi.string().trim().required(),
+            password: joi.string().trim().required(),
+            deviceId: joi.string().trim().required().label('Device ID'),
+            deviceToken: joi.string().trim().required().label('Device Token'),
+        }),
     }
 }

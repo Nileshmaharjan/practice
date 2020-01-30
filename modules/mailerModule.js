@@ -16,8 +16,8 @@ var options = {
 var emailConfig = {
     service: 'gmail',
     auth: {
-        user: 'mjn.nilesh1@gmail.com',
-        password: 'Kinghenry123$'
+        user: 'mjn.nilesh@gmail.com',
+        password: 'Gunnersrback123'
     }
 }
 
@@ -26,7 +26,7 @@ mailerTransporter.use('compile', hbs(options));
 
 var triggerEmail = function(emailObj) {
     mailerTransporter.sendMail({
-        from: 'mjn.nilesh1@gmail.com',
+        from: 'mjn.nilesh@gmail.com',
         to: emailObj.emailTo,
         subject: emailObj.subject,
         template: emailObj.templateName,

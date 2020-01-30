@@ -62,7 +62,23 @@ userSchema.pre("save", async function(next) {
     this.password = await bcryptNodeJs.hashSync(this.password, salt);
 
     next();
-})
+});
+
+userSchema.methods.isValidPassword = async function(newPassword) {
+    try {
+        return await bcryptNodeJs.compareSync(newPassword, this.password)
+    }
+    catch(error){
+        throw new Error(error.message)
+    }
+}
+
+userSchema.statics.profileById = async function(userId){
+    let project = 'email userName fbId firstName lastName fullName profilePhoto description homeAddress postCode countryCode ' +
+        'contactNumber codeContactNumber registeredFrom hasPetProfile tcUpdatedAt followedBy isContactNumberVerified';
+    //'-__v -password -passwordToken -passwordTokenExpiry'
+    return await this.findById(userId, project ).exec();
+};
 
 const users = mongoose.model('users', userSchema);                                                             
 module.exports = users;

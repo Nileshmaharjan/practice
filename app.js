@@ -45,4 +45,30 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 require('./routes/v1')(app)
 
+// catch 404 and forward to error handler
+// app.use(function(req, res, next) {
+//     // console.log('error has been caught ');
+//     let err = new Error('Not Found.');
+//     err.status = 404;
+//     next(err);
+// });
+
+// error handler
+// app.use(function(err, req, res, next) {
+//     err.status = err.status || 500 ;
+//     if( req.xhr && req.accepts('json') ) {
+//         res.json({
+//             message: err.message || 'Internal Server Error.',
+//             data:{}
+//         });
+//     } else {
+//         res.status(err.status);
+//         res.json({
+//             message:err.message,
+//             data:{}
+//         });
+//     }
+//     // console.log('error has been sent::'+err);
+// });
+
 module.exports = app;

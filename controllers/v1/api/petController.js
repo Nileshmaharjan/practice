@@ -1,5 +1,10 @@
 const petModel = require('../../../models/pets');
-const apiMessage = require('../../../constants/lang')
+const apiMessage = require('../../../constants/lang');
+const storyModel = require('../../../models/stories');
+const postModel = require('../../../models/posts');
+const postCommentModel = require('../../../models/postComment');
+
+const mongoose = require('mongoose');
 
 module.exports = {
     createPetProfile: async (req, res, next) => {
@@ -47,6 +52,46 @@ module.exports = {
             res.status(httpCode).json({
                 message: message
             });
+
+        }
+        catch (e) {
+            next(e);
+        }
+    }, 
+    remove: async (req, res, next) => {
+
+        try {
+            if (!mongoose.Types.ObjectId.isValid(req.query.petId)) {
+                let Err = new Error(apiMessage.PET_REMOVE.NOT_SELECTED.message);
+                Err.status = Err.code = apiMessage.PET_REMOVE.NOT_SELECTED.httpCode;
+                return next(Err);
+            }
+
+            if( !pet || (req.user._id.toString() !== pet.user.toString()) ){
+                let Err = new Error(PET_REMOVE.NOT_FOUND.message);
+                Err.status = Err.code = PET_REMOVE.NOT_FOUND.httpCode;
+                return next(Err);
+            }
+            await storyModel.deleteMany({pet: pet_id}).exec();
+            await postModel.deleteMany({pet: pet_id}).exec();
+
+            await postModel.find({pet: pet._id}, (err, posts) => {
+                if (err) {
+                    return false;
+                }
+                
+                posts.map((post) => {
+                    postCommentModel.deleteMany({post: post._id}).exec();
+                    postCommentModel.remove()
+                })
+            }).exec();
+            await pet.remove();
+
+            res.status(apiMessage.PET_REMOVE.SUCCESS.httpCode).json({
+                message: apiMessage.PET_REMOVE.SUCCESS.message,
+                error: {},
+                data: {}
+            })
 
         }
         catch (e) {
